@@ -22,7 +22,7 @@ import com.sendbird.android.UserMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatActivity extends AppCompatActivity {
+public class Messaging extends AppCompatActivity {
     private final String mChannelUrl = "sendbird_open_channel_tutorial";
     private final static String CHANNEL_HANDLER_ID = "CHANNEL_HANDLER_CHAT";
 
@@ -59,7 +59,8 @@ public class ChatActivity extends AppCompatActivity {
                         if (e != null) {
                             e.printStackTrace();
                             return;
-                        };
+                        }
+                        ;
 
                         mChatAdapter = new ChatAdapter(openChannel);
                         mRecyclerView.setAdapter(mChatAdapter);
@@ -268,13 +269,102 @@ public class ChatActivity extends AppCompatActivity {
             void bind(UserMessage message) {
                 messageText.setText(message.getMessage());
                 nameText.setText(message.getSender().getNickname());
-                Utils.displayRoundImageFromUrl(ChatActivity.this,
+                Utils.displayRoundImageFromUrl(Messaging.this,
                         message.getSender().getProfileUrl(), profileImage);
                 timeText.setText(Utils.formatTime(message.getCreatedAt()));
 
             }
         }
 
+        public class Messaging extends AppCompatActivity {
+            private final String mChannelUrl = "sendbird_open_channel_tutorial";
+            private final static String CHANNEL_HANDLER_ID = "CHANNEL_HANDLER_CHAT";
 
+            private ChatAdapter mChatAdapter;
+            private RecyclerView mRecyclerView;
+            private LinearLayoutManager mLayoutManager;
+            private Button mSendButton;
+            private EditText mMessageEditText;
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_chat);
+
+                mSendButton = (Button) findViewById(R.id.button_chat_send);
+                mMessageEditText = (EditText) findViewById(R.id.edittext_chat);
+
+                mRecyclerView = (RecyclerView) findViewById(R.id.reycler_chat);
+                mLayoutManager = new LinearLayoutManager(this);
+                mLayoutManager.setReverseLayout(true);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+
+                OpenChannel.getChannel(mChannelUrl, new OpenChannel.OpenChannelGetHandler() {
+                    @Override
+                    public void onResult(final OpenChannel openChannel, SendBirdException e) {
+                        if (e != null) {
+                            e.printStackTrace();
+                            return;
+                        }
+
+                        openChannel.enter(new OpenChannel.OpenChannelEnterHandler() {
+                            @Override
+                            public void onResult(SendBirdException e) {
+                                if (e != null) {
+                                    e.printStackTrace();
+                                    return;
+                                }
+                                ;
+
+                                mChatAdapter = new ChatAdapter(openChannel);
+                                mRecyclerView.setAdapter(mChatAdapter);
+                            }
+                        });
+                    }
+                });
+
+                mSendButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mChatAdapter.sendMessage(mMessageEditText.getText().toString());
+                        mMessageEditText.setText("");
+                    }
+                });
+
+                mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                        if (mLayoutManager.findLastVisibleItemPosition() == mChatAdapter.getItemCount() - 1) {
+                            mChatAdapter.loadPreviousMessages();
+                        }
+                    }
+                });
+
+            }
+
+        }
+
+
+        @Override
+        protected void onResume() {
+            super.onResume();
+
+            // Receives messages from SendBird servers
+            SendBird.addChannelHandler(CHANNEL_HANDLER_ID, new SendBird.ChannelHandler() {
+                @Override
+                public void onMessageReceived(BaseChannel baseChannel, BaseMessage baseMessage) {
+                    if (baseChannel.getUrl().equals(mChannelUrl) && baseMessage instanceof UserMessage) {
+                        mChatAdapter.appendMessage((UserMessage) baseMessage);
+                    }
+                }
+            });
+        }
+
+        @Override
+        protected void onPause() {
+            SendBird.removeChannelHandler(CHANNEL_HANDLER_ID);
+
+            super.onPause();
+        }
     }
 }
