@@ -347,7 +347,7 @@ public class Messaging extends AppCompatActivity {
 
         @Override
         protected void onResume() {
-            super.onResume();
+            super.onRes ume();
 
             // Receives messages from SendBird servers
             SendBird.addChannelHandler(CHANNEL_HANDLER_ID, new SendBird.ChannelHandler() {
