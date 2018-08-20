@@ -12,7 +12,7 @@ import com.sendbird.android.SendBird;
 import com.sendbird.android.SendBirdException;
 import com.sendbird.android.User;
 
-public class LoginActivity extends AppCompatActivity {
+public class ActivityLogin extends AppCompatActivity {
 
     private static final String APP_ID = "9DA1B1F4-0BE6-4DA8-82C5-2E81DAB56F23"; // SAMPLE
 
@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (e != null) {
                     // Error!
                     Toast.makeText(
-                            LoginActivity.this, "" + e.getCode() + ": " + e.getMessage(),
+                            ActivityLogin.this, "" + e.getCode() + ": " + e.getMessage(),
                             Toast.LENGTH_SHORT)
                             .show();
 
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 // Update the user's nickname
                 updateCurrentUserInfo(userNickname);
 
-                Intent intent = new Intent(LoginActivity.this, Messaging.class);
+                Intent intent = new Intent(ActivityLogin.this, Messaging.class);
                 startActivity(intent);
                 finish();
             }
@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (e != null) {
                     // Error!
                     Toast.makeText(
-                            LoginActivity.this, "" + e.getCode() + ":" + e.getMessage(),
+                            ActivityLogin.this, "" + e.getCode() + ":" + e.getMessage(),
                             Toast.LENGTH_SHORT)
                             .show();
 
