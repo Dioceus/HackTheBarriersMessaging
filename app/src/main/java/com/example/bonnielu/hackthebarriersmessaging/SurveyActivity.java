@@ -8,17 +8,18 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 
 public class SurveyActivity extends AppCompatActivity {
-
+    public static NewComer newYouth = new NewComer();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
-        //  static NewComer newYouth = new NewComer();
+
         Button submitBtn = (Button) findViewById(R.id.submitBtn);
         submitBtn.setOnClickListener(new View.OnClickListener() {
+          // public NewComer newYouth = new NewComer();
             @Override
             public void onClick(View view) {
-                NewComer newYouth = new NewComer();
+
                 EditText[] textResponses = new EditText[11];
                 String[] radioBtnResponses = new String[3];
                 textResponses[0] = (EditText) findViewById(R.id.nameText);
@@ -32,12 +33,6 @@ public class SurveyActivity extends AppCompatActivity {
                 textResponses[8] = (EditText) findViewById(R.id.communityLearningText);
                 textResponses[9] = (EditText) findViewById(R.id.interestsText);
                 textResponses[10] = (EditText) findViewById(R.id.futureAspirationsText);
-                //radioBtnResponses[0] = ((RadioButton) findViewById(familiarRadioGroup.getCheckedRadioButtonId())).getText().toString();
-                //radioBtnResponses[1] = ((RadioButton) findViewById(engRadioGroup
-                //      .getCheckedRadioButtonId())).getText().toString();
-                //radioBtnResponses[2] = ((RadioButton) findViewById(frRadioGroup
-                //    .getCheckedRadioButtonId())).getText().toString();
-
 
                 newYouth.name = textResponses[0].getText().toString();
                 newYouth.age = Integer.parseInt(textResponses[1].getText().toString());
@@ -55,7 +50,7 @@ public class SurveyActivity extends AppCompatActivity {
                 newYouth.nationalLangs[1] = Integer.parseInt(radioBtnResponses[2]);
 
 
-//                public void onRadioButtonClicked(View view) {
+            } public void onRadioButtonClicked(View view) {
                 // Is the button now checked?
                 boolean checked = ((RadioButton) view).isChecked();
 
