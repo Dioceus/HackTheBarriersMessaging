@@ -22,10 +22,3 @@ The app works by pairing immigrants with mentors. Both immigrants and mentors si
 
 Future plans for this app include improve the apps efficiency, adding more languages to the app, and creating a website to increase its outreach and accessibility. 
 
-
-Front End Developers: Bonnie Lu, Ivan Kwong
-
-Back End Developers: Bonnie Lu, David Chen, Linna Luo 
-
-Data Scientist: Ryan Zhang
-
